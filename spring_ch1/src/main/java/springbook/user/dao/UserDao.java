@@ -1,7 +1,6 @@
 package springbook.user.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,7 +48,7 @@ public class UserDao {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		UserDao dao = new UserDao(new DConnectionMaker());
+		UserDao dao = new DaoFactory().userDao();
 		
 		User user = new User();
 		user.setId("whiteship2");
