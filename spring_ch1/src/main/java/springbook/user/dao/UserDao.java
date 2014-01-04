@@ -9,9 +9,14 @@ import springbook.user.domain.User;
 
 public class UserDao {
 	private ConnectionMaker connectionMaker;
+	private Connection c;
+	private User user;
 	
-	public UserDao(ConnectionMaker connectionMaker) {
+	public UserDao() {
 		super();
+	}
+
+	public void setConnectionMaker(ConnectionMaker connectionMaker) {
 		this.connectionMaker = connectionMaker;
 	}
 
