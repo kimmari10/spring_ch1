@@ -8,7 +8,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 
 import springbook.user.domain.User;
 
-public class UserDaoTest {
+public class UserDaoTest2 {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 //		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
@@ -32,9 +32,6 @@ public class UserDaoTest {
 		}else {
 			System.out.println("조회 테스트 성공");
 		}
-		
-		
-		
 		
 	}
 }
