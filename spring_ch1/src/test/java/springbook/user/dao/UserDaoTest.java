@@ -69,7 +69,7 @@ public class UserDaoTest {
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
-		
+			
 		dao.get("unknown_id");
 	}
 }
