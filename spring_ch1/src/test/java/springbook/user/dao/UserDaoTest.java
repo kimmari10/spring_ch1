@@ -1,10 +1,11 @@
 package springbook.user.dao;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
@@ -13,14 +14,25 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.domain.User;
 
 public class UserDaoTest {
-
+	
+	private UserDao dao;
+	
+	private User user;
+	private User user2;
+	private User user3;
+	
+	@Before
+	public void setUp() {
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		this.dao = context.getBean("userDao", UserDao.class);
+		
+		this.user = new User("gyumee", "박성철", "springno2");
+		this.user2 = new User("len1en", "김민섭", "springno1");
+		this.user3 = new User("ggeeek", "박병은", "springno3");
+	}
+	
 	@Test
 	public void addAndGet() throws SQLException {
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		UserDao dao = context.getBean("userDao", UserDao.class);
-		
-		User user = new User("len1en", "김민섭", "springno1");
-		User user2 = new User("ggeeek", "박병은", "springno2");
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
@@ -41,13 +53,7 @@ public class UserDaoTest {
 	
 	@Test
 	public void count() throws SQLException {
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		UserDao dao = context.getBean("userDao", UserDao.class);
-		
-		User user = new User("gyumee", "박성철", "springno2");
-		User user2 = new User("len1en", "김민섭", "springno1");
-		User user3 = new User("ggeeek", "박병은", "springno3");
-		
+
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
 		
@@ -64,8 +70,6 @@ public class UserDaoTest {
 	
 	@Test(expected=EmptyResultDataAccessException.class)
 	public void getUserFailure() throws SQLException {
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		UserDao dao = context.getBean("userDao", UserDao.class);
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
