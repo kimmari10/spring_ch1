@@ -17,10 +17,10 @@
   		<version>3.8.1</version>
   	</dependency>
   	<dependency>
-  		<groupId>com.ora</groupId>
-  		<artifactId>ojdbc6</artifactId>
-  		<version>1.0</version>
-  	</dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0</version>
+	</dependency>
   	 <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
@@ -32,4 +32,26 @@
         <version>4.0.0.RELEASE</version>
     </dependency>
   </dependencies>
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+      <id>daum-public</id>
+      <url>http://maven.daumcorp.com/content/groups/daum-crm-group</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>http://repo.maven.apache.org/maven2</url>
+    </repository>
+  </repositories>
 </project>
