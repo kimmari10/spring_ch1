@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,21 +20,15 @@ import springbook.user.domain.User;
 @ContextConfiguration(locations="/applicationContext.xml")
 public class UserDaoTest {
 	
-//	@Autowired
+	@Autowired
 	private UserDao dao;
 	
 	private User user;
 	private User user2;
 	private User user3;
 	
-	@Autowired
-	private ApplicationContext context;
-	
 	@Before
 	public void setUp() {
-		context = new GenericXmlApplicationContext("applicationContext.xml");
-		this.dao = context.getBean("userDao", UserDao.class);
-		
 		this.user = new User("gyumee", "박성철", "springno2");
 		this.user2 = new User("len1en", "김민섭", "springno1");
 		this.user3 = new User("ggeeek", "박병은", "springno3");
