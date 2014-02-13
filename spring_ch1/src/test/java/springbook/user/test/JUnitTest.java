@@ -1,7 +1,10 @@
 package springbook.user.test;
 
-import static org.junit.Assert.*;
-import static org.hamcrest .CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -9,7 +12,7 @@ import org.junit.Test;
 
 public class JUnitTest {
 	
-	static JUnitTest testObject;
+	static Set<JUnitTest> testObjects = new HashSet<JUnitTest>();
 	
 	@Before
 	public void setUp() throws Exception {
@@ -21,17 +24,20 @@ public class JUnitTest {
 
 	@Test
 	public void test() {
-		assertThat(this, is(not(sameInstance(testObject))));
+		assertThat(testObjects, is(not(hasItem(this))));
+		testObjects.add(this);
 	}
 	
 	@Test
 	public void test2() {
-		assertThat(this, is(not(sameInstance(testObject))));
+		assertThat(testObjects, is(not(hasItem(this))));
+		testObjects.add(this);
 	}
 	
 	@Test
 	public void test3() {
-		assertThat(this, is(not(sameInstance(testObject))));
+		assertThat(testObjects, is(not(hasItem(this))));
+		testObjects.add(this);
 	}
 
 }
