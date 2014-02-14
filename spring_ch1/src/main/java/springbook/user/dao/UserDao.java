@@ -109,7 +109,7 @@ public class UserDao {
 		try {
 			//예외가 발생할 가능성이 있는 코드를 모두 try블록으로 묶어준다.
 			c = dataSource.getConnection();
-			ps = c.prepareStatement("delete from users");
+			ps = makeStatement(c);
 			ps.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -131,6 +131,13 @@ public class UserDao {
 				}
 			}
 		}
+	}
+	
+	//메소드 추출 - 메소드를 다른 곳에 재사용 할 수 있어야 하는데, 이건 반대로 분리시키고  남은 메소드가 재사용이 필요한 부분이 되버렸다. 
+	private PreparedStatement makeStatement(Connection c) throws SQLException {
+		PreparedStatement ps;
+		ps = c.prepareStatement("delete from users");
+		return ps;
 	}
 	
 	public int getCount() throws SQLException {
