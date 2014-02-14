@@ -104,12 +104,16 @@ public class UserDao {
 	}
 	
 	public void deleteAll() throws SQLException {
+		StatementStrategy strategy = new DeleteAllStatement();
+		jdbcContextWithStatementStrategy(strategy);
+	}
+
+	public void jdbcContextWithStatementStrategy(StatementStrategy strategy) throws SQLException {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
 			//예외가 발생할 가능성이 있는 코드를 모두 try블록으로 묶어준다.
 			c = dataSource.getConnection();
-			StatementStrategy strategy = new DeleteAllStatement();
 			ps = strategy.makePreparedStatement(c);
 			ps.executeUpdate();
 			
