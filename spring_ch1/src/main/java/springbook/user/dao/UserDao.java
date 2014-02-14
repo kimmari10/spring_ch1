@@ -28,35 +28,73 @@ public class UserDao {
 	}
 
 	public void add(User user) throws SQLException {
-		Connection c = this.dataSource.getConnection();
-		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
-		ps.setString(1, user.getId());
-		ps.setString(2, user.getName());
-		ps.setString(3, user.getPassword());
-
-		ps.executeUpdate();
-
-		ps.close();
-		c.close();
+		Connection c = null;
+		PreparedStatement ps = null;
+		try {
+			c = this.dataSource.getConnection();
+			ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
+			ps.setString(1, user.getId());
+			ps.setString(2, user.getName());
+			ps.setString(3, user.getPassword());
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+				}
+			}
+			if(c != null) {
+				try {
+					c.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
 	}
 
 	public User get(String id) throws SQLException {
-		Connection c = this.dataSource.getConnection();
-		PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
-		ps.setString(1, id);
-		
-		ResultSet rs = ps.executeQuery();
+		Connection c = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		User user = null;
-		if(rs.next()) {
-			user = new User();
-			user.setId(rs.getString("id"));
-			user.setName(rs.getString("name"));
-			user.setPassword(rs.getString("password"));
-		}
 		
-		rs.close();
-		ps.close();
-		c.close();
+		try {
+			c = this.dataSource.getConnection();
+			ps = c.prepareStatement("select * from users where id = ?");
+			ps.setString(1, id);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				user = new User();
+				user.setId(rs.getString("id"));
+				user.setName(rs.getString("name"));
+				user.setPassword(rs.getString("password"));
+			}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+				}
+			}
+			if(c != null) {
+				try {
+					c.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
 		
 		if(user == null) {
 			throw new EmptyResultDataAccessException(1);
@@ -96,16 +134,41 @@ public class UserDao {
 	}
 	
 	public int getCount() throws SQLException {
-		Connection c = dataSource.getConnection();
-		PreparedStatement ps = c.prepareStatement("select count(*) from users");
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		int count = rs.getInt(1);
-		rs.close();
-		ps.close();
-		c.close();
+		Connection c = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
-		return count;
+		try {
+			c = dataSource.getConnection();
+			ps = c.prepareStatement("select count(*) from users");
+			rs = ps.executeQuery();
+			rs.next();
+			return rs.getInt(1);
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+			if(c != null) {
+				try {
+					c.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
 	}
 	
 }
