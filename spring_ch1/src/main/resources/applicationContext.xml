@@ -11,8 +11,13 @@
 	<property name="username" value="len" />
 	<property name="password" value="go3044" />
 </bean>
-	
+
 <bean id="userDao"  class="springbook.user.dao.UserDao">
+	<property name="dataSource" ref="dataSource" />
+	<property name="jdbcContext" ref="jdbcContext" />
+</bean>
+
+<bean id="jdbcContext" class="springbook.user.dao.JdbcContext">
 	<property name="dataSource" ref="dataSource" />
 </bean>
 
