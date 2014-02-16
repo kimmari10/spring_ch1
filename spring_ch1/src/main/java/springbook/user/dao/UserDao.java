@@ -28,7 +28,7 @@ public class UserDao {
 	}
 
 	public void add(final User user) throws SQLException {
-		class AddStatement implements StatementStrategy {
+		StatementStrategy strategy = new StatementStrategy() {
 			public PreparedStatement makePreparedStatement(Connection c)
 					throws SQLException {
 				PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
@@ -37,8 +37,7 @@ public class UserDao {
 				ps.setString(3, user.getPassword());
 				return ps;
 			}
-		}
-		StatementStrategy strategy = new AddStatement();
+		};
 		jdbcContextWithStatementStrategy(strategy);
 	}
 
