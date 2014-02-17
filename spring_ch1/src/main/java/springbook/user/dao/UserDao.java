@@ -93,17 +93,7 @@ public class UserDao {
 	}
 	
 	public void deleteAll() throws SQLException {
-		executeSql("delete from users");
-	}
-
-	private void executeSql(final String query) throws SQLException {
-		this.jdbcContext.workWithStatementStrategy(new StatementStrategy() {
-			public PreparedStatement makePreparedStatement(Connection c)
-					throws SQLException {
-				PreparedStatement ps = c.prepareStatement(query);
-				return ps;
-			}
-		});
+		this.jdbcContext.executeSql("delete from users");
 	}
 
 	//메소드 추출 - 메소드를 다른 곳에 재사용 할 수 있어야 하는데, 이건 반대로 분리시키고  남은 메소드가 재사용이 필요한 부분이 되버렸다. 
