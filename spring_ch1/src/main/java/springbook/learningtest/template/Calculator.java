@@ -24,4 +24,32 @@ public class Calculator {
 			}
 		}
 	}
+
+	public Integer calcMultiply(String numFilepath) throws IOException {
+		BufferedReaderCallback multiplyCallback = new BufferedReaderCallback() {
+			public Integer doSomethingWithReader(BufferedReader br) throws IOException {
+				Integer multiply = 1;
+				String line = null;
+				while((line = br.readLine()) != null) {
+					multiply *= Integer.valueOf(line);
+				}
+				return multiply;
+			}
+		};
+		return fileReadTemplate(numFilepath, multiplyCallback);
+	}
+
+	public Integer calcSum(String numFilepath) throws IOException {
+		BufferedReaderCallback sumCallback = new BufferedReaderCallback() {
+			public Integer doSomethingWithReader(BufferedReader br) throws IOException {
+					Integer sum = 0;
+					String line = null;
+					while((line = br.readLine()) != null) {
+						sum += Integer.valueOf(line);
+					}
+					return sum;
+			}
+		};
+		return fileReadTemplate(numFilepath, sumCallback);
+	}
 }
