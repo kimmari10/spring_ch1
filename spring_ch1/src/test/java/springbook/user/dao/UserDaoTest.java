@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
-
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,9 +29,9 @@ public class UserDaoTest {
 	
 	@Before
 	public void setUp() {
-		this.user = new User("gyumee", "박성철", "springno2");
-		this.user2 = new User("len1en", "김민섭", "springno1");
-		this.user3 = new User("ggeeek", "박병은", "springno3");
+		this.user2 = new User("gyumee", "박성철", "springno2");
+		this.user3 = new User("len1en", "김민섭", "springno1");
+		this.user = new User("ggeeek", "박병은", "springno3");
 	}
 	
 	@Test
@@ -78,5 +78,36 @@ public class UserDaoTest {
 		assertThat(dao.getCount(), is(0));
 			
 		dao.get("unknown_id");
+	}
+	
+	@Test
+	public void getAll() throws SQLException {
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
+		List<User> userList = null;
+		dao.add(user);
+		userList = dao.getAll();
+		assertThat(userList.size(), is(1));
+		checkSameUser(user, userList.get(0));
+		
+		dao.add(user2);
+		userList = dao.getAll();
+		assertThat(userList.size(), is(2));
+		checkSameUser(user, userList.get(0));
+		checkSameUser(user2, userList.get(1));
+		
+		dao.add(user3);
+		userList = dao.getAll();
+		assertThat(dao.getCount(), is(3));
+		checkSameUser(user, userList.get(0));
+		checkSameUser(user2, userList.get(1));
+		checkSameUser(user3, userList.get(2));
+		
+	}
+
+	private void checkSameUser(User user4, User user5) {
+		assertThat(user4.getId(), is(user5.getId()));
+		assertThat(user4.getName(), is(user5.getName()));
+		assertThat(user4.getPassword(), is(user5.getPassword()));
 	}
 }
