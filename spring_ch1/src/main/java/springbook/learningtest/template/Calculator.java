@@ -94,4 +94,14 @@ public class Calculator {
 		};
 		return lineReadTemplate(numFilepath, sumCallback, 0);
 	}
+	
+	public String concatenate(String filepath) throws IOException {
+		LineCallback<String> conCallback = new LineCallback<String>() {
+			
+			public String doSomethingWithLine(String line, String value) {
+				return value + line;
+			}
+		};
+		return lineReadTemplate(filepath, conCallback, "");
+	}
 }
