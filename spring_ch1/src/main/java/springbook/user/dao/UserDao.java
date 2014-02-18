@@ -8,24 +8,23 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 
 import springbook.user.domain.User;
 
 public class UserDao {
 	private ConnectionMaker connectionMaker;
 	private DataSource dataSource;
-	private JdbcContext jdbcContext;
+	private JdbcTemplate jdbcTemplate;
 	
 	public UserDao() {
 		super();
 	}
-	
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
 
-	public void setJdbcContext(JdbcContext jdbcContext) {
-		this.jdbcContext = jdbcContext;
+	public void setDataSource(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+		this.dataSource = dataSource;
 	}
 
 	public void setConnectionMaker(ConnectionMaker connectionMaker) {
@@ -33,16 +32,7 @@ public class UserDao {
 	}
 
 	public void add(final User user) throws SQLException {
-		this.jdbcContext.workWithStatementStrategy(new StatementStrategy() {
-			public PreparedStatement makePreparedStatement(Connection c)
-					throws SQLException {
-				PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
-				ps.setString(1, user.getId());
-				ps.setString(2, user.getName());
-				ps.setString(3, user.getPassword());
-				return ps;
-			}
-		});
+		this.jdbcTemplate.update("insert into users(id, name, password) values(?,?,?)", user.getId(), user.getName(), user.getPassword());
 	}
 
 	public User get(String id) throws SQLException {
@@ -93,7 +83,12 @@ public class UserDao {
 	}
 	
 	public void deleteAll() throws SQLException {
-		this.jdbcContext.executeSql("delete from users");
+		this.jdbcTemplate.update(new PreparedStatementCreator() {
+			public PreparedStatement createPreparedStatement(Connection con)
+					throws SQLException {
+				return con.prepareStatement("delete from users");
+			}
+		});
 	}
 
 	//메소드 추출 - 메소드를 다른 곳에 재사용 할 수 있어야 하는데, 이건 반대로 분리시키고  남은 메소드가 재사용이 필요한 부분이 되버렸다. 
