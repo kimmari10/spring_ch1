@@ -84,6 +84,14 @@ public class UserDaoTest {
 	public void getAll() throws SQLException {
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
+		
+		//예외상황에 대한 테스트는 반드시 필요하다
+		//아래의 리스트가 아무것도 없을 경우엔 query메소드에서 0을 리턴해주지만,
+		//getAll에서 Exception을 낼수도 있고, query가 아닌 다른 방식으로 값을 가져오게 된다면, 다른 예외상황이 나타날 수 도 있기때문에
+		//이런 예외에 대한 테스트는 항상 만들어 놓는 것이 좋다.
+		List<User> users0 = dao.getAll();
+		assertThat(users0.size(), is(0));
+		
 		List<User> userList = null;
 		dao.add(user);
 		userList = dao.getAll();
