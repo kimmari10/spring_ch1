@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -117,5 +118,12 @@ public class UserDaoTest {
 		assertThat(user4.getId(), is(user5.getId()));
 		assertThat(user4.getName(), is(user5.getName()));
 		assertThat(user4.getPassword(), is(user5.getPassword()));
+	}
+	
+	@Test(expected=DataAccessException.class)
+	public void duplicateKey() {
+		dao.deleteAll();
+		dao.add(user);
+		dao.add(user);
 	}
 }
