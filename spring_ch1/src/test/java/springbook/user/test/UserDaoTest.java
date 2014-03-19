@@ -10,7 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import springbook.user.dao.UserDao;
+import springbook.user.dao.UserDaoJdbc;
 import springbook.user.domain.User;
 
 public class UserDaoTest {
@@ -26,7 +26,7 @@ public class UserDaoTest {
 	@Test
 	public void addAndGet() throws SQLException {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		UserDao dao = context.getBean("userDao", UserDao.class);
+		UserDaoJdbc dao = context.getBean("userDao", UserDaoJdbc.class);
 		User user = new User();
 		user.setId("test");
 		user.setName("김민섭");

@@ -13,7 +13,7 @@ public class UserDaoTest2 {
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 //		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 
-		UserDao dao = context.getBean("userDao", UserDao.class);
+		UserDaoJdbc dao = context.getBean("userDao", UserDaoJdbc.class);
 		User user = new User();
 		user.setId("whiteship2");
 		user.setName("백기선2");
