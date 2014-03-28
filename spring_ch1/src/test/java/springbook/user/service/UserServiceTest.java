@@ -2,10 +2,14 @@ package springbook.user.service;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static springbook.user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,10 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
-import springbook.user.service.UserService.TestUserServiceException;
-import static springbook.user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
-import static springbook.user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
-import static springbook.user.service.UserService.TestUserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="/test-applicationContext.xml")
@@ -30,6 +30,9 @@ public class UserServiceTest {
 	
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	DataSource dataSource;
 	
 	List<User> users;
 	
@@ -50,7 +53,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void upgradeLevels() {
+	public void upgradeLevels() throws Exception {
 		userDao.deleteAll();
 		for(User user : users) userDao.add(user);
 		
@@ -83,18 +86,17 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void upgradeAllOrNothing() {
+	public void upgradeAllOrNothing() throws Exception {
 		UserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDao(this.userDao);
+		testUserService.setDataSource(this.dataSource);
 		userDao.deleteAll();
 		for(User user : users) {
 			userDao.add(user);
 		}
-		
 		try {
 			testUserService.upgradeLevels();
-			//fail("TestUserServiceException expected");
-		} catch (TestUserServiceException e) {
+		} catch (TesUserServiceException e) {
 		}
 		
 		checkLevelUpgraded(users.get(1), false);
