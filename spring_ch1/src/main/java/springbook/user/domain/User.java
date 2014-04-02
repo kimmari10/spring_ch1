@@ -7,6 +7,7 @@ public class User {
 	Level level;
 	int login;
 	int recommend;
+	String email;
 	
 	public User(String id, String name, String password, Level level, int login, int recommend) {
 		super();
@@ -71,5 +72,13 @@ public class User {
 		} else {
 			this.level = nextLevel;
 		}
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }
