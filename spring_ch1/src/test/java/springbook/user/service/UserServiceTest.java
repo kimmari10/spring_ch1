@@ -2,12 +2,13 @@ package springbook.user.service;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static springbook.user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
-import static springbook.user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
+import static org.junit.Assert.*;
+import static springbook.user.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.service.UserServiceImpl.MIN_RECCOMEND_FOR_GOLD;
 
 import java.util.Arrays;
 import java.util.List;
+
 
 
 import org.junit.Before;
@@ -28,7 +29,7 @@ import springbook.user.domain.User;
 @ContextConfiguration(locations="/test-applicationContext.xml")
 public class UserServiceTest {
 	@Autowired
-	UserService userService;
+	UserServiceImpl userServiceImpl;
 	
 	@Autowired
 	UserDao userDao;
@@ -54,7 +55,7 @@ public class UserServiceTest {
 	
 	@Test
 	public void bean() {
-		assertThat(this.userService, is(notNullValue()));
+		assertThat(this.userServiceImpl, is(notNullValue()));
 	}
 	
 	@Test
@@ -64,9 +65,9 @@ public class UserServiceTest {
 		for(User user : users) userDao.add(user);
 		
 		MockMailSender mockMailSender = new MockMailSender();
-		userService.setMailSender(mockMailSender);
+		userServiceImpl.setMailSender(mockMailSender);
 		
-		userService.upgradeLevels();
+		userServiceImpl.upgradeLevels();
 		
 		checkLevelUpgraded(users.get(0), false);
 		checkLevelUpgraded(users.get(1), true);
@@ -87,8 +88,8 @@ public class UserServiceTest {
 		User userWithoutLevel = users.get(0);
 		userWithoutLevel.setLevel(null);
 		
-		userService.add(userWithLevel);
-		userService.add(userWithoutLevel);
+		userServiceImpl.add(userWithLevel);
+		userServiceImpl.add(userWithoutLevel);
 		
 		User userWithLevelRead = userDao.get(userWithLevel.getId());
 		User userWithoutLevelRead = userDao.get(userWithoutLevel.getId());
@@ -100,16 +101,21 @@ public class UserServiceTest {
 	
 	@Test
 	public void upgradeAllOrNothing() throws Exception {
-		UserService testUserService = new TestUserService(users.get(3).getId());
+		TestUserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDao(this.userDao);
-		testUserService.setTransactionManager(transactionManager);
 		testUserService.setMailSender(mailSender);
+		
+		UserServiceTx txUserService = new UserServiceTx();
+		txUserService.setTransactionManager(transactionManager);
+		txUserService.setUserService(testUserService);
+		
 		userDao.deleteAll();
 		for(User user : users) {
 			userDao.add(user);
 		}
 		try {
-			testUserService.upgradeLevels();
+			txUserService.upgradeLevels();
+			fail("TestUserServiceException expected");
 		} catch (TesUserServiceException e) {
 		}
 		
