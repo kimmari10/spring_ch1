@@ -74,7 +74,7 @@ public class UserServiceTest {
 		
 		userServiceImpl.upgradeLevels();
 		
-		//User 타입의 오브젝트를 파라미터로 받으며 update( ) 메소드가 두 번 호출됐는지 (times(2)) 확인하라(verify)는 것이다.
+		//User 타입의 오브젝트를 파라미터로 받으며 update( ) 메소드가 두 번 호출됐는지 (times(2)) 확인하라(verify)는 것이다. -any를 사용하면 파라미터의 내용은 무시하고 호출 횟수만 확인할 수 있다.
 		verify(mockUserDao, times(2)).update(any(User.class));
 		
 		//verify(mockUserDao).update(users.get(1))은 users.get(1) 을 파라미터로 update( )가 호출된 적이 있는지를 확인해준다. update()가 아예 호출된 적이 없거나 파라미터가 users.get(1) 이 아니었다면 테스트는 실패한다.
