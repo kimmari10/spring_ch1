@@ -1,6 +1,7 @@
 package springbook.user.dao;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
@@ -163,7 +164,7 @@ public class UserDaoTest {
 			// TODO: handle exception
 			SQLException sqlEx = (SQLException)e.getRootCause();
 			SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
-			assertThat((DuplicateKeyException)set.translate(null, null, sqlEx), is(DuplicateKeyException.class));
+			assertThat((DuplicateKeyException)set.translate(null, null, sqlEx), isA(DuplicateKeyException.class));
 		}
 	}
 }
